@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+
+public class BreadthFirstSearch
+{
+    public Point FindOptimalPosition(Point startPoint)
+    {
+        Queue<Point> queue = new Queue<Point>();
+        double tolerance = 0.001; // Tolerancia para detectar la posición óptima
+
+        queue.Enqueue(startPoint);
+
+        while (queue.Count > 0)
+        {
+            Point currentPosition = queue.Dequeue();
+            double targetDistance = CalculateTargetDistance(currentPosition);
+
+            if (Math.Abs(targetDistance) <= tolerance)
+            {
+                return currentPosition; // Encontramos la posición óptima
+            }
+
+            // Generar los vecinos (movimientos) en la dirección X
+            List<Point> neighbors = GenerateNeighbors(currentPosition);
+
+            foreach (var neighbor in neighbors)
+            {
+                queue.Enqueue(neighbor);
+            }
+        }
+
+        // Si llegamos aquí, no se encontró una solución dentro de la tolerancia
+        return null;
+    }
+
+    private double CalculateTargetDistance(Point position)
+    {
+        // Supongamos que aquí calculamos la distancia euclidiana
+        // entre la posición actual y la posición objetivo.
+        double targetX = 10.0; // Coordenada X de la posición objetivo
+        double targetY = 5.0;  // Coordenada Y de la posición objetivo
+        double targetZ = 2.0;  // Coordenada Z de la posición objetivo
+
+        double deltaX = position.X - targetX;
+        double deltaY = position.Y - targetY;
+        double deltaZ = position.Z - targetZ;
+
+        // Calcular la distancia euclidiana
+        double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+        return distance;
+    }
+
+    private List<Point> GenerateNeighbors(Point position)
+    {
+        // Genera los vecinos (movimientos) en la dirección X
+        // Aquí puedes implementar lógica específica para generar vecinos
+        // basados en la posición actual, como moverse hacia la izquierda y la derecha en X.
+        // Asegúrate de adaptar esto a las necesidades de tu problema.
+
+        List<Point> neighbors = new List<Point>();
+
+        double deltaX = 0.1; // Tamaño del paso en la dirección X
+        Point leftNeighbor = new Point { X = position.X - deltaX, Y = position.Y, Z = position.Z };
+        Point rightNeighbor = new Point { X = position.X + deltaX, Y = position.Y, Z = position.Z };
+
+        neighbors.Add(leftNeighbor);
+        neighbors.Add(rightNeighbor);
+
+        return neighbors;
+    }
+}
+
+public class Point
+{
+    public double X { get; set; }
+    public double Y { get; set; }
+    public double Z { get; set; }
+}
